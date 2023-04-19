@@ -30,16 +30,6 @@ function! s:CheckShowDiagnostics()
     call s:ShowDiagnostics()
 endfunction
 
-function! s:ToggleDiagnosticsWindow()
-    if g:diagnostics_window_enabled == 1
-        let g:diagnostics_window_enabled = 0
-    else
-        let g:diagnostics_window_enabled = 1
-        let s:current_line = -1
-        call s:CheckShowDiagnostics()
-    endif
-endfunction
-
 augroup DiagnosticsWinCursorMove
     autocmd!
     autocmd CursorMoved * call s:CheckShowDiagnostics()
@@ -54,4 +44,25 @@ function! s:RegisterToInfoboard()
     call s:infoboard_agent.RegisterInfoSource('diaginfo')
 endfunction
 
-autocmd VimEnter * call s:RegisterToInfoboard()
+function! s:UnRegisterToInfoboard()
+    if !exists('g:loaded_infoboard') || g:loaded_infoboard != 1
+        echom "infoboard not loaded"
+        return
+    endif
+    let s:infoboard_agent = GetInfoboardAgent()
+    call s:infoboard_agent.UnRegisterInfoSource('diaginfo')
+endfunction
+
+function! s:ToggleDiagnosticsWindow()
+    if g:diagnostics_window_enabled == 1
+        let g:diagnostics_window_enabled = 0
+        call s:UnRegisterToInfoboard()
+    else
+        let g:diagnostics_window_enabled = 1
+        let s:current_line = -1
+        call s:RegisterToInfoboard()
+        call s:CheckShowDiagnostics()
+    endif
+endfunction
+
+
