@@ -1,6 +1,8 @@
 # vim-diagnostics
 A vim-plugin created by ChatGPT (and me) to display full diagnostics information of current cursor line
 
+![image](./diaginfo3.gif)
+
 ## prerequisite
 + Vim 8.1 or higher
 + This plugin depends on [vim-infoboard](https://github.com/RickiZhang/vim-infoboard)
